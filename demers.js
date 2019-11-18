@@ -1,6 +1,8 @@
 ;(async function() {
   // https://bl.ocks.org/cmgiven/9d6bc46cf586738458c13dd2b5dadd84
+  
   const graph = await getDemersGraph();
+
   const stateColors = d3.scaleQuantize().domain([0, 8]).range(d3.schemeSet1);
   for(let i=0; i<graph.nodes.length; i++) {
     graph.nodes[i]["fill"] = stateColors(graph.nodes[i]["CED_CODE18"][0]);
@@ -185,11 +187,124 @@
   }
 
   async function getDemersGraph() {
-    const nodes = await d3.json("./nodes.json");
-    const links = await d3.json("./links.json");
+    // get abs file simplified with mapshaper.org
+    const mapKey = "CED_CODE18";
+    const mapData = await d3.json("./CED_2018_AUST_1pc.geo.json");
+    console.log("Got source geo json");
+
+    // use turf.js to remove islands
+    const mapDataNoIslands = removeIslands(mapData);
+    console.log("Removed islands");
+
+    // get unique list of polygon codes
+    const codes = mapDataNoIslands
+      .features
+      .map(f => f.properties[mapKey])
+      .filter((v, i, a) => a.indexOf(v) === i);
+    console.log(codes);
+
+    // return object with graph data 
     return {
-      "nodes": nodes,
-      "links": links
+      "nodes": mapNodes(mapDataNoIslands),
+      "links": mapLinks(mapDataNoIslands)
     }
+
+    // function to remove islands
+    function removeIslands(mapData) {     
+      // new FeatureCollection
+      let newMapData = {
+        "type": "FeatureCollection",
+        "features": []
+      }
+    
+      // iterate features
+      for(let i=0; i<mapData.features.length; i++) {
+        let f = mapData.features[i];
+        // some features have no geometry
+        if(f.geometry != null) {
+          // want to remove all areas but largest from multi polygons
+          if(f.geometry.type == "MultiPolygon") {
+            let coordCount = f.geometry.coordinates.length;
+            let largestArea = 0;
+            let largestCoords;
+            // iterate coordinate sets to get largest polygon and keep coords of that polygon
+            for(let j=0; j<coordCount; j++) {
+              let polygon = turf.polygon(f.geometry.coordinates[j]);
+              let area = turf.area(polygon);
+              if(area>largestArea) {
+                largestArea = area;
+                largestCoords = f.geometry.coordinates[j];
+              }
+            }
+            newMapData.features.push({
+              "type": "Feature",
+              "geometry": {
+                "type": "Polygon",
+                "coordinates": largestCoords
+              },
+              "properties": f.properties
+            });
+          } else {
+            // push original feature into new data
+            newMapData.features.push({
+              "type": "Feature",
+              "geometry": f.geometry,
+              "properties": f.properties
+            });
+          }
+        }
+      }
+      return newMapData;
+    }
+
+    // return links of map polygons for force directed graph
+    function mapLinks(mapData) {
+      var links = [];
+      for(let i=0; i<codes.length; i++) {
+        for(let j=0; j<codes.length; j++) {
+          if(i!=j) {
+            let feature1 = mapData.features.find(f => f.properties[mapKey] == codes[i]);
+            let feature2 = mapData.features.find(f => f.properties[mapKey] == codes[j]);
+            if(feature1.geometry && feature2.geometry) {
+              let polygon1 = turf.polygon(feature1.geometry.coordinates);
+              let polygon2 = turf.polygon(feature2.geometry.coordinates);
+              let test = turf.intersect(polygon1, polygon2);
+              if(test) {
+                links.push({
+                  "source": feature1.properties[mapKey],
+                  "target": feature2.properties[mapKey]
+                });
+              } else {
+                // no intersection
+              }
+            }
+          }
+        }
+      }
+      console.log("Created graph links");
+      return links;
+    }
+  
+    // return nodes of per map polygons for force directed graph
+    function mapNodes(mapData) {
+      let nodes = [];
+      for(let i=0; i<mapData.features.length; i++) {
+        let f = mapData.features[i];
+        let coords = f.geometry.coordinates;
+        let polygon = turf.polygon(coords);
+        let centre = turf.centerOfMass(polygon);
+        nodes.push({
+          "CED_CODE18": f.properties["CED_CODE18"],
+          "CED_NAME18": f.properties["CED_NAME18"],
+          "CED_POPU17": f.properties["CED_POPU17"],
+          "lat": centre.geometry.coordinates[1],
+          "long": centre.geometry.coordinates[0]
+        });
+      }
+      console.log("Created graph nodes");
+      return nodes;
+    }
+  
   }
+  
 })();
