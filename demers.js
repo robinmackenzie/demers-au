@@ -1,7 +1,7 @@
 ;(async function() {
   // https://bl.ocks.org/cmgiven/9d6bc46cf586738458c13dd2b5dadd84
   
-  const graph = await getDemersGraph(false);
+  const graph = await getDemersGraph();
 
   const stateColors = d3.scaleQuantize().domain([0, 8]).range(d3.schemeSet1);
   for(let i=0; i<graph.nodes.length; i++) {
@@ -9,7 +9,7 @@
   }
 
   // prep
-  const width = 800, height = 600, maxSize = 16;
+  const width = 800, height = 600, maxSize = 20;
 
   const projection = d3.geoEquirectangular()
     .scale(width)
@@ -92,91 +92,91 @@
     var iterations = 1
 
     function force() {
-        var node, size, mass, xi, yi
-        var i = -1
-        while (++i < iterations) { iterate() }
+      var node, size, mass, xi, yi
+      var i = -1
+      while (++i < iterations) { iterate() }
 
-        function iterate() {
-            var j = -1
-            var tree = d3.quadtree(nodes, xCenter, yCenter).visitAfter(prepare)
+      function iterate() {
+        var j = -1
+        var tree = d3.quadtree(nodes, xCenter, yCenter).visitAfter(prepare)
 
-            while (++j < nodes.length) {
-                node = nodes[j]
-                size = sizes[j]
-                mass = masses[j]
-                xi = xCenter(node)
-                yi = yCenter(node)
+        while (++j < nodes.length) {
+          node = nodes[j]
+          size = sizes[j]
+          mass = masses[j]
+          xi = xCenter(node)
+          yi = yCenter(node)
 
-                tree.visit(apply)
-            }
+          tree.visit(apply)
         }
+      }
 
-        function apply(quad, x0, y0, x1, y1) {
-            var data = quad.data
-            var xSize = (size[0] + quad.size[0]) / 2
-            var ySize = (size[1] + quad.size[1]) / 2
-            if (data) {
-                if (data.index <= node.index) { return }
+      function apply(quad, x0, y0, x1, y1) {
+        var data = quad.data
+        var xSize = (size[0] + quad.size[0]) / 2
+        var ySize = (size[1] + quad.size[1]) / 2
+        if (data) {
+          if (data.index <= node.index) { return }
 
-                var x = xi - xCenter(data)
-                var y = yi - yCenter(data)
-                var xd = Math.abs(x) - xSize
-                var yd = Math.abs(y) - ySize
+          var x = xi - xCenter(data)
+          var y = yi - yCenter(data)
+          var xd = Math.abs(x) - xSize
+          var yd = Math.abs(y) - ySize
 
-                if (xd < 0 && yd < 0) {
-                    var l = Math.sqrt(x * x + y * y)
-                    var m = masses[data.index] / (mass + masses[data.index])
+          if (xd < 0 && yd < 0) {
+            var l = Math.sqrt(x * x + y * y)
+            var m = masses[data.index] / (mass + masses[data.index])
 
-                    if (Math.abs(xd) < Math.abs(yd)) {
-                        node.vx -= (x *= xd / l * strength) * m
-                        data.vx += x * (1 - m)
-                    } else {
-                        node.vy -= (y *= yd / l * strength) * m
-                        data.vy += y * (1 - m)
-                    }
-                }
-            }
-
-            return x0 > xi + xSize || y0 > yi + ySize ||
-                  x1 < xi - xSize || y1 < yi - ySize
-        }
-
-        function prepare(quad) {
-            if (quad.data) {
-                quad.size = sizes[quad.data.index]
+            if (Math.abs(xd) < Math.abs(yd)) {
+              node.vx -= (x *= xd / l * strength) * m
+              data.vx += x * (1 - m)
             } else {
-                quad.size = [0, 0]
-                var i = -1
-                while (++i < 4) {
-                    if (quad[i] && quad[i].size) {
-                        quad.size[0] = Math.max(quad.size[0], quad[i].size[0])
-                        quad.size[1] = Math.max(quad.size[1], quad[i].size[1])
-                    }
-                }
+              node.vy -= (y *= yd / l * strength) * m
+              data.vy += y * (1 - m)
             }
+          }
         }
+
+        return x0 > xi + xSize || y0 > yi + ySize ||
+          x1 < xi - xSize || y1 < yi - ySize
+      }
+
+      function prepare(quad) {
+        if (quad.data) {
+          quad.size = sizes[quad.data.index]
+        } else {
+          quad.size = [0, 0]
+          var i = -1
+          while (++i < 4) {
+            if (quad[i] && quad[i].size) {
+              quad.size[0] = Math.max(quad.size[0], quad[i].size[0])
+              quad.size[1] = Math.max(quad.size[1], quad[i].size[1])
+            }
+          }
+        }
+      }
     }
 
     function xCenter(d) { return d.x + d.vx }
     function yCenter(d) { return d.y + d.vy }
 
     force.initialize = function (_) {
-        sizes = (nodes = _).map(size)
-        masses = sizes.map(function (d) { return d[0] * d[1] })
+      sizes = (nodes = _).map(size)
+      masses = sizes.map(function (d) { return d[0] * d[1] })
     }
 
     force.size = function (_) {
-        return (arguments.length
-            ? (size = typeof _ === 'function' ? _ : constant(_), force)
-            : size)
+      return (arguments.length
+        ? (size = typeof _ === 'function' ? _ : constant(_), force)
+        : size)
     }
 
     force.strength = function (_) {
-        return (arguments.length ? (strength = +_, force) : strength)
+      return (arguments.length ? (strength = +_, force) : strength)
     }
 
     force.iterations = function (_) {
-        return (arguments.length ? (iterations = +_, force) : iterations)
+      return (arguments.length ? (iterations = +_, force) : iterations)
     }
 
     return force
@@ -267,13 +267,16 @@
     function mapLinks(mapData) {
       let polygons = {};
       let links = [];
-      let testCounter = 0;
+      // pre compute the polygon for each feature
       for (let i=0; i<codes.length; i++) {
         let feature = mapData.features.find(f => f.properties[mapKey] == codes[i]);
+        // skip features with no geometry otherwise get the turf polygon
         if (feature.geometry) {
           polygons[codes[i]] = turf.polygon(feature.geometry.coordinates);
         }
       }
+
+      // iterate all polygons looking for neighbours (turf intersect)
       let polygonCount = Object.keys(polygons).length;
       for (let i=0; i<polygonCount; i++) {
         for (let j=0; j<polygonCount; j++) {
@@ -283,8 +286,6 @@
             let polygon1 = polygons[key1];
             let polygon2 = polygons[key2];
             let test = turf.intersect(polygon1, polygon2);
-            ++testCounter;
-            if (testCounter % 100 == 0) console.log(testCounter);
             if(test) {
               links.push({
                 "source": key1,
@@ -294,37 +295,9 @@
           }
         }
       }
-      console.log(`Created graph links with iterations: ${testCounter}`);
       return links;
     }
-
-    function mapLinks_slow(mapData) {
-      var links = [];
-      for(let i=0; i<codes.length; i++) {
-        for(let j=0; j<codes.length; j++) {
-          if(i!=j) {
-            let feature1 = mapData.features.find(f => f.properties[mapKey] == codes[i]);
-            let feature2 = mapData.features.find(f => f.properties[mapKey] == codes[j]);
-            if(feature1.geometry && feature2.geometry) {
-              let polygon1 = turf.polygon(feature1.geometry.coordinates);
-              let polygon2 = turf.polygon(feature2.geometry.coordinates);
-              let test = turf.intersect(polygon1, polygon2);
-              if(test) {
-                links.push({
-                  "source": feature1.properties[mapKey],
-                  "target": feature2.properties[mapKey]
-                });
-              } else {
-                // no intersection
-              }
-            }
-          }
-        }
-      }
-      console.log("Created graph links");
-      return links;
-    }
-  
+ 
     // return nodes of per map polygons for force directed graph
     function mapNodes(mapData) {
       let nodes = [];
@@ -341,7 +314,6 @@
           "long": centre.geometry.coordinates[0]
         });
       }
-      console.log("Created graph nodes");
       return nodes;
     }
   
