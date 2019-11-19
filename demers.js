@@ -1,7 +1,7 @@
 ;(async function() {
   // https://bl.ocks.org/cmgiven/9d6bc46cf586738458c13dd2b5dadd84
   
-  const graph = await getDemersGraph();
+  const graph = await getDemersGraph(false);
 
   const stateColors = d3.scaleQuantize().domain([0, 8]).range(d3.schemeSet1);
   for(let i=0; i<graph.nodes.length; i++) {
@@ -9,7 +9,7 @@
   }
 
   // prep
-  const width = 600, height = 450, maxSize = 20;
+  const width = 800, height = 600, maxSize = 16;
 
   const projection = d3.geoEquirectangular()
     .scale(width)
@@ -187,21 +187,27 @@
   }
 
   async function getDemersGraph() {
+    const nodes = await d3.json("./nodes.json");
+    const links = await d3.json("./links.json");
+    return {
+      "nodes": nodes,
+      "links": links
+    }
+  }
+
+  async function computeDemersGraph() {
     // get abs file simplified with mapshaper.org
     const mapKey = "CED_CODE18";
     const mapData = await d3.json("./CED_2018_AUST_1pc.geo.json");
-    console.log("Got source geo json");
 
     // use turf.js to remove islands
     const mapDataNoIslands = removeIslands(mapData);
-    console.log("Removed islands");
 
     // get unique list of polygon codes
     const codes = mapDataNoIslands
       .features
       .map(f => f.properties[mapKey])
       .filter((v, i, a) => a.indexOf(v) === i);
-    console.log(codes);
 
     // return object with graph data 
     return {
@@ -259,6 +265,40 @@
 
     // return links of map polygons for force directed graph
     function mapLinks(mapData) {
+      let polygons = {};
+      let links = [];
+      let testCounter = 0;
+      for (let i=0; i<codes.length; i++) {
+        let feature = mapData.features.find(f => f.properties[mapKey] == codes[i]);
+        if (feature.geometry) {
+          polygons[codes[i]] = turf.polygon(feature.geometry.coordinates);
+        }
+      }
+      let polygonCount = Object.keys(polygons).length;
+      for (let i=0; i<polygonCount; i++) {
+        for (let j=0; j<polygonCount; j++) {
+          if (!(i==j)) {
+            let key1 = Object.keys(polygons)[i];
+            let key2 = Object.keys(polygons)[j];
+            let polygon1 = polygons[key1];
+            let polygon2 = polygons[key2];
+            let test = turf.intersect(polygon1, polygon2);
+            ++testCounter;
+            if (testCounter % 100 == 0) console.log(testCounter);
+            if(test) {
+              links.push({
+                "source": key1,
+                "target": key2
+              });
+            }           
+          }
+        }
+      }
+      console.log(`Created graph links with iterations: ${testCounter}`);
+      return links;
+    }
+
+    function mapLinks_slow(mapData) {
       var links = [];
       for(let i=0; i<codes.length; i++) {
         for(let j=0; j<codes.length; j++) {
