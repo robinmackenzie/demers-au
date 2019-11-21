@@ -1,7 +1,9 @@
 ;(async function() {
   
   const graph = await getDemersGraph();
-  // graph.links = []
+  graph.links = []
+  // const graph = await computeDemersGraph();
+  // console.log(JSON.stringify(graph.nodes, null, 2));
 
   const stateColors = d3.scaleQuantize().domain([0, 8]).range(d3.schemeSet1);
   for(let i=0; i<graph.nodes.length; i++) {
@@ -27,6 +29,7 @@
     .id(function (d) { return d["CED_CODE18"] })
     .distance(function (d) {
       return (size(d.source["CED_POPU17"]) + size(d.target["CED_POPU17"])) / 200;
+      // return (size(d.source["AREASQKM18"]) + size(d.target["AREASQKM18"])) / 200
     })
     .strength(0.6);
 
@@ -38,7 +41,7 @@
     .iterations(12)
 
   const simulation = d3.forceSimulation()
-    .force("center", d3.forceCenter(width / 2, (height - maxSize) / 2))
+    .force("center", d3.forceCenter(width / 1.5, (height - maxSize) / 1.8))
     .force("link", linkForce)
     .force("collision", collisionForce)
     .force("x", d3.forceX(function (d) { return d.xi })) //.strength(1.0125))
