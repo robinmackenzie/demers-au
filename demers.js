@@ -1,5 +1,4 @@
 ;(async function() {
-  // https://bl.ocks.org/cmgiven/9d6bc46cf586738458c13dd2b5dadd84
   
   const graph = await getDemersGraph();
 
@@ -265,8 +264,10 @@
 
     // return links of map polygons for force directed graph
     function mapLinks(mapData) {
+
       let polygons = {};
       let links = [];
+
       // pre compute the polygon for each feature
       for (let i=0; i<codes.length; i++) {
         let feature = mapData.features.find(f => f.properties[mapKey] == codes[i]);
