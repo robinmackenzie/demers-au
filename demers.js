@@ -1,6 +1,7 @@
 ;(async function() {
   
   const graph = await getDemersGraph();
+  // graph.links = []
 
   const stateColors = d3.scaleQuantize().domain([0, 8]).range(d3.schemeSet1);
   for(let i=0; i<graph.nodes.length; i++) {
@@ -311,6 +312,7 @@
           "CED_CODE18": f.properties["CED_CODE18"],
           "CED_NAME18": f.properties["CED_NAME18"],
           "CED_POPU17": f.properties["CED_POPU17"],
+          "AREASQKM18": f.properties["AREASQKM18"],
           "lat": centre.geometry.coordinates[1],
           "long": centre.geometry.coordinates[0]
         });
