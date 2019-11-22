@@ -53,14 +53,14 @@
         var l = size(d["CED_POPU17"])
         return [l / opts["collisionForceFactor"], l / opts["collisionForceFactor"]]
       })
-      .iterations(12)
+      .iterations(12);
   
     const simulation = d3.forceSimulation()
       .force("center", d3.forceCenter(width / 1.5, (height - maxSize) / 1.8))
       .force("link", linkForce)
       .force("collision", collisionForce)
-      .force("x", d3.forceX(function (d) { return d.xi })) //.strength(1.0125))
-      .force("y", d3.forceY(function (d) { return d.yi })) //.strength(1.0125))
+      .force("x", d3.forceX(function (d) { return d.xi }))
+      .force("y", d3.forceY(function (d) { return d.yi }));
   
     // use graph
     size.domain([0, d3.max(graph.nodes, d => d["CED_POPU17"])]);
@@ -76,7 +76,8 @@
       .enter()
       .append("g")
       .attr("class", "division")
-      .style("fill", d => d["fill"]);
+      .style("fill", d => d["fill"])
+      .on("mouseenter", hovered);
   
     divisions.append("rect");
   
@@ -88,6 +89,16 @@
     simulation.nodes(graph.nodes);
     simulation.force("link").links(!opts["useLinks"] ? [] : graph.links);
     simulation.on("tick", ticked);
+
+    function hovered(d) {
+      let info = `Name: ${d["CED_NAME18"]}
+        Code: ${d["CED_CODE18"]}
+        Pop (2017): ${d["CED_POPU17"]}
+        Area: ${d["AREASQKM18"]}`;
+
+      d3.select("#info")
+        .text(info);
+    }
   
     function ticked() {
       var sizes = d3.local();
