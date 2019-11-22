@@ -1,5 +1,7 @@
 ;const demers = (function() {
 
+  let graph;
+
   async function buildGraph(fromSource) {
     let graph;
     if (fromSource) {
@@ -11,7 +13,7 @@
   }
 
   async function redraw(opts) {
-    const graph = await buildGraph(false); 
+    graph = await buildGraph(false); 
     graph.links = []
     // const graph = await computeDemersGraph();
     // console.log(JSON.stringify(graph.nodes, null, 2));
@@ -339,7 +341,8 @@
   }
 
   return {
+    "buildGraph": buildGraph,
     "redraw": redraw
   }
-    
+
 })();
