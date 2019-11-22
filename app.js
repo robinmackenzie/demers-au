@@ -4,10 +4,13 @@ document.getElementById("runButton")
 
 async function initialDraw() {
   await demers.buildGraph(false);
-  await drawMap();
+  const opts = {
+    "useLinks": document.getElementById("useLinks").checked,
+    "nodeSize": parseInt(document.getElementById("nodeSize").value),
+  }
+  await drawMap(opts);
 }
 
-async function drawMap() {
-  console.log("Redrawing...");
-  await demers.redraw({});
+async function drawMap(opts) {
+  await demers.redraw(opts);
 }
