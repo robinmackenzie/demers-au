@@ -13,10 +13,9 @@
   }
 
   async function redraw(opts) {
-    graph = await buildGraph(false); 
-    graph.links = []
-    // const graph = await computeDemersGraph();
-    // console.log(JSON.stringify(graph.nodes, null, 2));
+    if (!graph) {
+      graph = await buildGraph(false); 
+    }
   
     const stateColors = d3.scaleQuantize().domain([0, 8]).range(d3.schemeSet1);
     for(let i=0; i<graph.nodes.length; i++) {
@@ -24,15 +23,19 @@
     }
   
     // prep
-    const width = 800, height = 600, maxSize = 20;
+    const width = 800, height = 600;
+    let maxSize = opts.nodeSize;
   
     const projection = d3.geoEquirectangular()
       .scale(width)
       .translate([width / 2, height / 2]);
   
     const size  = d3.scaleSqrt().range([0, maxSize]);
-  
-    const svg = d3.select("body")
+    
+    d3.select("#map")
+      .html("");
+      
+    const svg = d3.select("#map")
       .append("svg")
       .attr("width", width)
       .attr("height", height)
@@ -84,7 +87,7 @@
     //   .text(function (d) { return d["CED_NAME18"] });
   
     simulation.nodes(graph.nodes);
-    simulation.force("link").links(graph.links);
+    simulation.force("link").links(!opts.useLinks ? [] : graph.links);
     simulation.on("tick", ticked);
   
     function ticked() {
