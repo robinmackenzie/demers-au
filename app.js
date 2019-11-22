@@ -12,6 +12,7 @@ async function drawMap() {
     "useLinks": document.getElementById("useLinks").checked,
     "nodeSize": parseInt(document.getElementById("nodeSize").value),
     "linkForceStrength": parseFloat(document.getElementById("linkForceStrength").value),
+    "collisionForceFactor": parseFloat(document.getElementById("collisionForceFactor").value)
   }
   await demers.redraw(opts);
 }

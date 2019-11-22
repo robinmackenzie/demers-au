@@ -45,14 +45,13 @@
       .id(function (d) { return d["CED_CODE18"] })
       .distance(function (d) {
         return (size(d.source["CED_POPU17"]) + size(d.target["CED_POPU17"])) / 200;
-        // return (size(d.source["AREASQKM18"]) + size(d.target["AREASQKM18"])) / 200
       })
       .strength(opts["linkForceStrength"]);
   
     const collisionForce = rectCollide()
       .size(function (d) {
         var l = size(d["CED_POPU17"])
-        return [l, l]
+        return [l / opts["collisionForceFactor"], l / opts["collisionForceFactor"]]
       })
       .iterations(12)
   
