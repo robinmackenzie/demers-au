@@ -1,22 +1,39 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<style>
+  #wrapper {
+    position: relative;
+  }
+  #params {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  #info {
+    position: relative;
+    float: right;
+  }
+</style>
 <body>
-  <div id="params">
-    Use links:
-    <input id="useLinks" type="checkbox" checked>
-    Node size:
-    <input id="nodeSize" type="number" min="1" max="99" value="20">
-    <br>
-    Link force strength
-    <input id="linkForceStrength" type="number" min="0.1" max="2" value="0.6" step="0.1">
-    <br>
-    Collision force factor
-    <input id="collisionForceFactor" type="number" min="0.1" max="8" value="1" step="0.1">
-    <br>
-    <button id="runButton">Run</button>
-    <br>
+  <div id="wrapper">
+    <div id="params">
+        Use links:
+        <input id="useLinks" type="checkbox" checked>
+        Node size:
+        <input id="nodeSize" type="number" min="1" max="99" value="20">
+        <br>
+        Link force strength
+        <input id="linkForceStrength" type="number" min="0.1" max="2" value="0.6" step="0.1">
+        <br>
+        Collision force factor
+        <input id="collisionForceFactor" type="number" min="0.1" max="8" value="1" step="0.1">
+        <br>
+        <button id="runButton">Run</button>
+        <br>
+      </div>
+      <div id="info"></div>
+      <div id="map"></div>
   </div>
-  <div id="map"></div>
   <script src="./d3.v5.min.js"></script>
   <script src="./turf.min.js"></script>
   <script src="./app.js"></script>  
