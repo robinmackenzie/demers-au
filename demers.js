@@ -80,12 +80,7 @@
       .on("mouseenter", hovered);
   
     divisions.append("rect");
-  
-    // divisions.append("text")
-    //   .attr("text-anchor", "middle")
-    //   .attr("dy", ".3em")
-    //   .text(function (d) { return d["CED_NAME18"] });
-  
+   
     simulation.nodes(graph.nodes);
     simulation.force("link").links(!opts["useLinks"] ? [] : graph.links);
     simulation.on("tick", ticked);
