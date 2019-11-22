@@ -24,7 +24,7 @@
   
     // prep
     const width = 800, height = 600;
-    let maxSize = opts.nodeSize;
+    let maxSize = opts["nodeSize"];
   
     const projection = d3.geoEquirectangular()
       .scale(width)
@@ -47,7 +47,7 @@
         return (size(d.source["CED_POPU17"]) + size(d.target["CED_POPU17"])) / 200;
         // return (size(d.source["AREASQKM18"]) + size(d.target["AREASQKM18"])) / 200
       })
-      .strength(0.6);
+      .strength(opts["linkForceStrength"]);
   
     const collisionForce = rectCollide()
       .size(function (d) {
@@ -87,7 +87,7 @@
     //   .text(function (d) { return d["CED_NAME18"] });
   
     simulation.nodes(graph.nodes);
-    simulation.force("link").links(!opts.useLinks ? [] : graph.links);
+    simulation.force("link").links(!opts["useLinks"] ? [] : graph.links);
     simulation.on("tick", ticked);
   
     function ticked() {

@@ -11,6 +11,7 @@ async function drawMap() {
   const opts = {
     "useLinks": document.getElementById("useLinks").checked,
     "nodeSize": parseInt(document.getElementById("nodeSize").value),
+    "linkForceStrength": parseFloat(document.getElementById("linkForceStrength").value),
   }
   await demers.redraw(opts);
 }
