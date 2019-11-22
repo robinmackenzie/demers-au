@@ -23,7 +23,7 @@
     }
   
     // prep
-    const width = 800, height = 600;
+    const width = 800, height = 580;
     let maxSize = opts["nodeSize"];
   
     const projection = d3.geoEquirectangular()
