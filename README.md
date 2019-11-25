@@ -42,16 +42,18 @@ Then, the divisions become the nodes of the graph, and the neighbourhood relatio
 ### Why Australia?
 Australia is interesting for two reasons - firstly, I live here. Secondly, there are not enough examples on the web of Australian cartograms so I have to make one!
 
-### Is the implementation any good?
+## Is the implementation any good?
 
-#### Default settings
+Let's reserve judgement and see a few examples instead...
+
+### Default settings
 Let's take a look at the output with the default settings. If you're familiar with Australia and know in advance that this is supposed to be a cartogram then with a stretch of imagination then Queensland, New South Wales, Australia Capital Territory (ACT), Victoria and Tasmania are in the right sort of place with kinda-sorta the right shape. South Australia, Northern Territory and Western Australia are leaving something to be desired:
 
 ![Default settings](/images/l-1-ns-20-lfs-0.6-cff-1.png)
 
 Note that some nodes are slightly bigger than others - e.g. SE NSW and Tasmania. The min and max of the population data is 102,079 and 223,820. 
 
-#### Remove the links
+### Remove the links
 The option to remove links will empty the edges of the graphs which negates some of the effect of using a force directed graph (the attraction). Rather pleasingly, we still retain the effect (the repulsion) which stops the nodes overlapping each other:
 
 ![Default settings - no links](/images/l-0-ns-20-lfs-0.6-cff-1.png)
@@ -65,12 +67,17 @@ Leaving links off, and reducing node size to 16 and the collision force factor t
 Similar to the other example with no edges, we get the overall *impression* of Australia, retaining the force-repulsed divisions of NSW, QLD and VIC in somewhat reasonable configuration. We have problems with the Victorian divisions of Bruce (south of Tasmania), Aston and Calwell (dislocated into NSW).
 
 ### Increasing the link force strength
-If we triple the size of the link force strength parameter and retain the other defaults (no point turning links off and playing with this parameter) we get a much 'clumpier' output which whilst preserving the topology of the states is less recognizable as Australia than previous examples:
+If we triple the size of the link force strength parameter and retain the other defaults (no point turning links off and playing with this parameter) the output 'clumps' more and we see WA, NT and SA connect up. The topology of the states is somewhat preserved. Overall, this is less recognizable as Australia than previous examples:
 
 ![Default settings - link force strength 1.8](/images/l-1-ns-20-lfs-1.8-cff-1.png)
 
-If we are sacrifice the *impression* of Australia (as Demers basically asks us to) I would also suggest reducing the node size to 19 and the collision force factor to 0.6 which produces a 'rounder' output which keeps the states in somewhat the right place:
+Further, reducing the node size to 19 and the collision force factor to 0.6 'rounds out' the above example, keeping the states in somewhat the right place:
 
 ![Links on, node size 19, link force strength 1.8, collision force factor 0.6](/images/l-1-ns-19-lfs-1.8-cff-0.6.png)
 
+### Conclusion
+
+Of the truer-to-Demers examples, my personal preference is the last. I can see this as a reasonable choice for some thematic map. Further to the comments in Chris' block, I can also see the utility of manually cutting out some edges to tweak the output e.g. NW NSW is straying into QLD a little too much.
+
+Of the not-so-true-to-Demers examples, my preference is the first. Aston would need to be tweaked to rejoin it with the rest of Victoria.
 
