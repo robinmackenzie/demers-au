@@ -56,7 +56,7 @@ The option to remove links will empty the edges of the graphs which negates some
 
 ![Default settings - no links](/images/l-0-ns-20-lfs-0.6-cff-1.png)
 
-This is essentially anti-Demers in that we have sacrificed contiguity to retain distance. However, for the large states of New South Wales, Queensland and Victoria, we have managed to get some sense of their 'spread' without losing their 'shape'.
+This is essentially anti-Demers (or quasi-Demers?) in that we have sacrificed contiguity to retain distance. However, for the large states of New South Wales, Queensland and Victoria, we have managed to get some sense of their 'spread' without losing their 'shape'.
 
 Leaving links off, and reducing node size to 16 and the collision force factor to 0.7 we get this:
 
@@ -72,3 +72,5 @@ If we triple the size of the link force strength parameter and retain the other 
 If we are sacrifice the *impression* of Australia (as Demers basically asks us to) I would also suggest reducing the node size to 19 and the collision force factor to 0.6 which produces a 'rounder' output which keeps the states in somewhat the right place:
 
 ![Links on, node size 19, link force strength 1.8, collision force factor 0.6](/images/l-1-ns-19-lfs-1.8-cff-0.6.png)
+
+
