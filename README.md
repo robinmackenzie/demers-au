@@ -62,4 +62,13 @@ Leaving links off, and reducing node size to 16 and the collision force factor t
 
 ![No links, node size 16, link force strength 0.6, collision force factor 0.7](/images/l-0-ns-16-lfs-0.6-cff-0.7.png)
 
-Similar to the other example with no edges, we get the overall *impression* of Australia, retaining the force-repulsed divisions of NSW, QLD and VIC in somewhat reasonable configuration.
+Similar to the other example with no edges, we get the overall *impression* of Australia, retaining the force-repulsed divisions of NSW, QLD and VIC in somewhat reasonable configuration. We have problems with the Victorian divisions of Bruce (south of Tasmania), Aston and Calwell (dislocated into NSW).
+
+### Increasing the link force strength
+If we triple the size of the link force strength parameter and retain the other defaults (no point turning links off and playing with this parameter) we get a much 'clumpier' output which whilst preserving the topology of the states is less recognizable as Australia than previous examples:
+
+![Default settings - link force strength 1.8](/images/l-1-ns-20-lfs-1.8-cff-1.png)
+
+If we are sacrifice the *impression* of Australia (as Demers basically asks us to) I would also suggest reducing the node size to 19 and the collision force factor to 0.6 which produces a 'rounder' output which keeps the states in somewhat the right place:
+
+![Links on, node size 19, link force strength 1.8, collision force factor 0.6](/images/l-1-ns-19-lfs-1.8-cff-0.6.png)
