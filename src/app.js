@@ -10,7 +10,7 @@ async function initialDraw() {
 async function drawMap() {
   const opts = {
     "useLinks": document.getElementById("useLinks").checked,
-    "nodeSize": parseInt(document.getElementById("nodeSize").value),
+    "maxNodeSize": parseInt(document.getElementById("maxNodeSize").value),
     "linkForceStrength": parseFloat(document.getElementById("linkForceStrength").value),
     "collisionForceFactor": parseFloat(document.getElementById("collisionForceFactor").value),
     "svgHeight": document.getElementById("wrapper").clientHeight,
@@ -21,7 +21,7 @@ async function drawMap() {
 
 function resetParams() {
   document.getElementById("useLinks").checked = true;
-  document.getElementById("nodeSize").value = 20;
+  document.getElementById("maxNodeSize").value = 20;
   document.getElementById("linkForceStrength").value = 0.6;
   document.getElementById("collisionForceFactor").value = 1;
 }

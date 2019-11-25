@@ -25,7 +25,7 @@
     // prep
     let width = opts["svgWidth"]
     let height = opts["svgHeight"];
-    let maxSize = opts["nodeSize"];
+    let maxSize = opts["maxNodeSize"];
   
     const projection = d3.geoEquirectangular()
       .scale(width)
