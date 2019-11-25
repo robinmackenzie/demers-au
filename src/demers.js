@@ -215,8 +215,8 @@
   }
 
   async function getDemersGraph() {
-    const nodes = await d3.json("./nodes.json");
-    const links = await d3.json("./links.json");
+    const nodes = await d3.json("./mapdata/nodes.json");
+    const links = await d3.json("./mapdata/links.json");
     return {
       "nodes": nodes,
       "links": links
