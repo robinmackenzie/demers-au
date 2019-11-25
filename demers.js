@@ -87,13 +87,14 @@
     simulation.on("tick", ticked);
 
     function hovered(d) {
-      let info = `Name: ${d["CED_NAME18"]}
-        Code: ${d["CED_CODE18"]}
-        Pop (2017): ${d["CED_POPU17"]}
-        Area: ${d["AREASQKM18"]}`;
+      let info = [];
+      info.push(`Name: ${d["CED_NAME18"]}`);
+      info.push(`Code: ${d["CED_CODE18"]}`);
+      info.push(`Pop (2017): ${d["CED_POPU17"].toFixed(0)}`);
+      info.push(`Area: ${d["AREASQKM18"].toFixed(2)} sq km`);
 
       d3.select("#info")
-        .text(info);
+        .html(info.join("<br>"));
     }
   
     function ticked() {
