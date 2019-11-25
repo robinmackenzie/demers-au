@@ -30,7 +30,7 @@ Nit-pickers may understandably want to re-title this page as *Demers-like cartog
 ## Trying it out for Australia
 Australian geography can be obtained from the ABS and for this exercise, I used the Commonwealth Electoral Division file from 2018 which is available [here](https://www.abs.gov.au/AUSSTATS/abs@.nsf/DetailsPage/1270.0.55.003July%202018?OpenDocument). 
 
-[Mapshaper]() can be used to convert to geojson and then to simplify the geography down to 1 percent.
+[Mapshaper](https://mapshaper.org/) can be used to convert to geojson format and to simplify the geography down to 1 percent.
 
 I've prepared a pre-computed set of nodes and links for the force directed graph approach. I've also included the code to compute those outputs but it's a bit slow. We need to end up with:
 
@@ -38,3 +38,10 @@ I've prepared a pre-computed set of nodes and links for the force directed graph
 * list of neighbours - this is derived by iterating over the geojson features with turf.js and using the intersect function for the neighbourhood test
 
 Then, the divisions become the nodes of the graph, and the neighbourhood relationships become the edges.
+
+### Why Australia?
+Australia is interesting for two reasons - firstly, I live here. Secondly, there are not enough examples on the web of Australian cartograms so I have to make one!
+
+### Is the implementation any good?
+Let's take a look at the output with the default settings:
+![Default settings](/images/l-1-ns-20-lfs-0.6-cff-1.png)
