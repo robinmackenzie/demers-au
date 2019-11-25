@@ -3,6 +3,8 @@
 <style>
   #wrapper {
     position: relative;
+    width: 800px;
+    height: 600px;
   }
   #params {
     position: absolute;
@@ -10,8 +12,8 @@
     left: 0;
   }
   #info {
-    position: relative;
-    float: right;
+    position: absolute;
+    right: 0;
   }
 </style>
 <body>
@@ -30,9 +32,9 @@
         <br>
         <button id="runButton">Run</button>
         <br>
-      </div>
-      <div id="info"></div>
-      <div id="map"></div>
+    </div>
+    <div id="info"></div>
+    <div id="map"></div>
   </div>
   <script src="./d3.v5.min.js"></script>
   <script src="./turf.min.js"></script>

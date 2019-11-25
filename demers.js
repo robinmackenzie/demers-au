@@ -23,7 +23,8 @@
     }
   
     // prep
-    const width = 800, height = 580;
+    let width = opts["svgWidth"]
+    let height = opts["svgHeight"];
     let maxSize = opts["nodeSize"];
   
     const projection = d3.geoEquirectangular()
