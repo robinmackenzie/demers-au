@@ -57,7 +57,7 @@
       .iterations(12);
   
     const simulation = d3.forceSimulation()
-      .force("center", d3.forceCenter(width / 1.5, (height - maxSize) / 1.8))
+      .force("center", d3.forceCenter(width / 1.8, (height - maxSize) / 1.8))
       .force("link", linkForce)
       .force("collision", collisionForce)
       .force("x", d3.forceX(function (d) { return d.xi }))
