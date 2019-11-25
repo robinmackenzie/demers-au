@@ -43,5 +43,5 @@ Then, the divisions become the nodes of the graph, and the neighbourhood relatio
 Australia is interesting for two reasons - firstly, I live here. Secondly, there are not enough examples on the web of Australian cartograms so I have to make one!
 
 ### Is the implementation any good?
-Let's take a look at the output with the default settings:
+Let's take a look at the output with the default settings. If you're familiar with Australia and know in advance that this is supposed to be a cartogram then with a stretch of imagination then Queensland, New South Wales, Australia Capital Territory (ACT), Victoria and Tasmania are in the right sort of place with kinda-sorta the right shape. South Australia, Northern Territory and Western Australia are leaving something to be desired:
 ![Default settings](/images/l-1-ns-20-lfs-0.6-cff-1.png)
