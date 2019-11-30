@@ -1,5 +1,5 @@
 # demers-au
-Demers cartogram of Australia using a D3 force directed graph
+Demers cartogram of Australia using a D3 force directed graph. The demo is [here](https://robinmackenzie.github.io/demers-au/).
 
 ## Inspiration
 Chris Given has useful Block showing a Demers cartogram built with D3. It's visualizing population by US state between 1900 and 2010. [The block is here](https://bl.ocks.org/cmgiven/9d6bc46cf586738458c13dd2b5dadd84).
